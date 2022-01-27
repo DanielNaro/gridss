@@ -128,8 +128,36 @@ public class ComputeSamTags extends ReferenceCommandLineProgram {
     				try (SAMFileWriter writer = writerFactory.makeSAMOrBAMWriter(header, true, tmpoutput)) {
 						while (asyncIt.hasNext()) {
 							SAMRecord r = asyncIt.next();
+
+							if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+								log.error("About to write Found ",
+										r.getReadName(), " " +
+												"unmapped status ",
+										r.getReadUnmappedFlag(), " mappingQuality ",
+										r.getMappingQuality(), " supplementaryAlignment ",
+										r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+										, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+							}
+
 							for (String tag : REMOVE_TAGS) {
 								r.setAttribute(tag, null);
+							}
+
+							if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+								log.error("About to write Found ",
+										r.getReadName(), " " +
+												"unmapped status ",
+										r.getReadUnmappedFlag(), " mappingQuality ",
+										r.getMappingQuality(), " supplementaryAlignment ",
+										r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+										, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+							}
+
+							if(r.getReadUnmappedFlag()){
+								r.setMappingQuality(0);
+								r.setSupplementaryAlignmentFlag(false);
+								r.setSecondaryAlignment(false);
+								r.setProperPairFlag(false);
 							}
 							writer.addAlignment(r);
 							progress.record(r);
@@ -210,17 +238,59 @@ public class ComputeSamTags extends ReferenceCommandLineProgram {
 			int supplementaryOverlap,
 			boolean fixTerminalCigar,
 			ReferenceLookup reference) {
+
+		for(SAMRecord r : records){
+			if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+				log.error("Found ",r.getReadName(), " unmapped status ",
+						r.getReadUnmappedFlag(), " mappingQuality ",
+						r.getMappingQuality(), " supplementaryAlignment ",
+						r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+						, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+			}
+		}
+
 		if (fixDuplicates) {
 			ensureConsistentDuplicateFlag(records);
+		}
+
+		for(SAMRecord r : records){
+			if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+				log.error("After fixDuplicates Found ",r.getReadName(), " " +
+								"unmapped status ",
+						r.getReadUnmappedFlag(), " mappingQuality ",
+						r.getMappingQuality(), " supplementaryAlignment ",
+						r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+						, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+			}
 		}
 		if (fixTerminalCigar) {
 			for (SAMRecord r : records) {
 				SAMRecordUtil.clipTerminalIndelCigars(r);
 			}
 		}
+		for(SAMRecord r : records){
+			if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+				log.error("After clipTerminalIndelCigars Found ",r.getReadName(), " " +
+								"unmapped status ",
+						r.getReadUnmappedFlag(), " mappingQuality ",
+						r.getMappingQuality(), " supplementaryAlignment ",
+						r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+						, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+			}
+		}
 		if ((tags.contains(SAMTag.NM.name()) || tags.contains(SAMTag.SA.name()))) {
 			for (SAMRecord r : records) {
 				SAMRecordUtil.ensureNmTag(reference, r);
+			}
+		}
+		for(SAMRecord r : records){
+			if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+				log.error("After ensureNmTag Found ",r.getReadName(), " " +
+								"unmapped status ",
+						r.getReadUnmappedFlag(), " mappingQuality ",
+						r.getMappingQuality(), " supplementaryAlignment ",
+						r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+						, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
 			}
 		}
 		// TODO: support secondary alignments by switching to templateBySegmentByAlignmentGroup() and handling split secondary reads
@@ -241,6 +311,16 @@ public class ComputeSamTags extends ReferenceCommandLineProgram {
 				SAMRecordUtil.calculateMultimappingTags(tags, segment);
 			}
 		}
+		for(SAMRecord r : records){
+			if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+				log.error("After segment work ",r.getReadName(), " " +
+								"unmapped status ",
+						r.getReadUnmappedFlag(), " mappingQuality ",
+						r.getMappingQuality(), " supplementaryAlignment ",
+						r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+						, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+			}
+		}
 		if (fixMates || tags.contains(SAMTag.MC.name()) || tags.contains(SAMTag.MQ.name())) {
 			SAMRecordUtil.matchReadPairPrimaryAlignments(segments);
 			if (segments.size() >= 2) {
@@ -255,13 +335,43 @@ public class ComputeSamTags extends ReferenceCommandLineProgram {
 				}
 			}
 		}
+		for(SAMRecord r : records){
+			if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+				log.error("After fixMate ",r.getReadName(), " " +
+								"unmapped status ",
+						r.getReadUnmappedFlag(), " mappingQuality ",
+						r.getMappingQuality(), " supplementaryAlignment ",
+						r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+						, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+			}
+		}
 		// R2
 		if (tags.contains(SAMTag.R2.name())) {
 			SAMRecordUtil.calculateTagR2(segments);
 		}
+		for(SAMRecord r : records){
+			if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+				log.error("After R2 ",r.getReadName(), " " +
+								"unmapped status ",
+						r.getReadUnmappedFlag(), " mappingQuality ",
+						r.getMappingQuality(), " supplementaryAlignment ",
+						r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+						, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+			}
+		}
 		// Q2
 		if (tags.contains(SAMTag.Q2.name())) {
 			SAMRecordUtil.calculateTagQ2(segments);
+		}
+		for(SAMRecord r : records){
+			if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+				log.error("After Q2 ",r.getReadName(), " " +
+								"unmapped status ",
+						r.getReadUnmappedFlag(), " mappingQuality ",
+						r.getMappingQuality(), " supplementaryAlignment ",
+						r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+						, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+			}
 		}
 		for (SAMRecord r : records) {
 			if(r.getReadUnmappedFlag()){
@@ -269,6 +379,16 @@ public class ComputeSamTags extends ReferenceCommandLineProgram {
 				r.setSupplementaryAlignmentFlag(false);
 				r.setSecondaryAlignment(false);
 				r.setProperPairFlag(false);
+			}
+		}
+		for(SAMRecord r : records){
+			if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+				log.error("Final ",r.getReadName(), " " +
+								"unmapped status ",
+						r.getReadUnmappedFlag(), " mappingQuality ",
+						r.getMappingQuality(), " supplementaryAlignment ",
+						r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+						, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
 			}
 		}
 		return records;
