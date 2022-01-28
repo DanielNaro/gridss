@@ -144,7 +144,7 @@ ENV GRIDSS_JAR=/opt/gridss/gridss-${GRIDSS_VERSION}-gridss-jar-with-dependencies
 LABEL software="GRIDSS"
 LABEL software.version="$GRIDSS_VERSION"
 LABEL about.summary="Genomic Rearrangement IDentification Software Suite"
-LABEL about.home="https://github.com/PapenfussLab/gridss"
+LABEL about.home="https://github.com/DanielNaro/gridss"
 LABEL about.tags="Genomics"
 RUN mkdir /opt/gridss/ /data
 COPY --from=gridss_builder_c /opt/gridss/gridsstools /opt/gridss/
@@ -168,3 +168,5 @@ FROM scratch AS gridss_export_build_artefacts
 ARG GRIDSS_VERSION
 COPY --from=gridss /opt/gridss/* /
 
+FROM gridss_export_build_artefacts AS final
+RUN apt-get install -y tabix
