@@ -299,16 +299,66 @@ public class ComputeSamTags extends ReferenceCommandLineProgram {
 			if (fixTruncated) {
 				SAMRecordUtil.addMissingHardClipping(segment);
 			}
+			for (SAMRecord r: segment){
+				if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+					log.error("After addMissingHardClipping ",r.getReadName(),
+							"unmapped status ",
+							r.getReadUnmappedFlag(), " mappingQuality ",
+							r.getMappingQuality(), " supplementaryAlignment ",
+							r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+							, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+				}
+			}
 			if (softenHardClips) {
 				SAMRecordUtil.softenHardClips(segment);
 			}
+			for (SAMRecord r: segment){
+				if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+					log.error("After softenHardClips ",r.getReadName(),
+							"unmapped status ",
+							r.getReadUnmappedFlag(), " mappingQuality ",
+							r.getMappingQuality(), " supplementaryAlignment ",
+							r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+							, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+				}
+			}
 			if (recalculateSupplementary) {
 				SAMRecordUtil.reinterpretAsSplitReadAlignment(segment, supplementaryOverlap);
+				for (SAMRecord r: segment){
+					if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+						log.error("After reinterpretAsSplitReadAlignment ",r.getReadName(),
+								"unmapped status ",
+								r.getReadUnmappedFlag(), " mappingQuality ",
+								r.getMappingQuality(), " supplementaryAlignment ",
+								r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+								, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+					}
+				}
 			} else if (tags.contains(SAMTag.SA.name())) {
 				SAMRecordUtil.recalculateSupplementaryFromSA(segment);
+				for (SAMRecord r: segment){
+					if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+						log.error("After recalculateSupplementaryFromSA ",r.getReadName(),
+								"unmapped status ",
+								r.getReadUnmappedFlag(), " mappingQuality ",
+								r.getMappingQuality(), " supplementaryAlignment ",
+								r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+								, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+					}
+				}
 			}
 			if (Sets.intersection(tags, ImmutableSet.of(SAMTag.CC.name(), SAMTag.CP.name(), SAMTag.HI.name(), SAMTag.IH.name())).size() > 0) {
 				SAMRecordUtil.calculateMultimappingTags(tags, segment);
+				for (SAMRecord r: segment){
+					if(r.getReadName().equalsIgnoreCase("HX10_29659:4:1219:28564:16445")){
+						log.error("After calculateMultimappingTags ",r.getReadName(),
+								"unmapped status ",
+								r.getReadUnmappedFlag(), " mappingQuality ",
+								r.getMappingQuality(), " supplementaryAlignment ",
+								r.getSupplementaryAlignmentFlag(), " secondaryAlignment "
+								, r.isSecondaryAlignment(), " properPairFlag ",r.getProperPairFlag());
+					}
+				}
 			}
 		}
 		for(SAMRecord r : records){
